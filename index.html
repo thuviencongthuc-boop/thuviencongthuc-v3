@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thư Viện Công Thức – Hàng Trăm Công Thức Món Ăn Thực Chiến Mở Quán</title>
+  <meta name="description" content="Chuyên cung cấp hàng trăm công thức món ăn vặt, đồ uống, xốt chấm thực chiến định lượng chuẩn kinh doanh cho người mở quán, xe đẩy và bán online." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./config.js"></script>
+  <script src="./catalog.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #fafaf9; color: #1c1917; }
+    .accordion-content { transition: all 0.25s ease-out; }
+    .glass-header { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(12px); }
+    .hero-bg {
+      background-image: linear-gradient(to bottom right, rgba(28, 25, 23, 0.82), rgba(154, 52, 18, 0.78)),
+        url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1400&q=80');
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+<body class="pb-28">
+
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-40 glass-header border-b border-stone-200">
+    <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white shadow-sm">
+          <i data-lucide="chef-hat" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="font-extrabold text-base leading-tight text-stone-900">Thư Viện Công Thức</div>
+          <div class="text-[11px] font-medium text-orange-600">thuviencongthuc.com</div>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-2">
+        <!-- Mục Tài Sản -->
+        <button onclick="openAssetsModal()" class="relative flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold text-sm transition">
+          <i data-lucide="folder-heart" class="w-4 h-4 text-amber-600"></i>
+          <span>Tài sản</span>
+          <span id="assetCountBadge" class="hidden ml-0.5 px-1.5 py-0.5 text-[11px] font-bold bg-amber-600 text-white rounded-full">0</span>
+        </button>
+
+        <!-- Đăng nhập / Tài khoản -->
+        <button id="authBtn" onclick="handleAuthClick()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-semibold text-sm transition">
+          <i data-lucide="user" class="w-4 h-4"></i>
+          <span id="authBtnText" class="hidden sm:inline">Đăng nhập</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO BANNER / POSTER -->
+  <section class="hero-bg text-white">
+    <div class="max-w-4xl mx-auto px-4 py-10 sm:py-14">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/25 border border-orange-300/40 text-orange-100 text-xs font-semibold mb-4">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        Ưu đãi khai trương • Giảm sâu đến 51%
+      </div>
+      <h1 class="text-2xl sm:text-4xl font-extrabold leading-tight mb-3">
+        Kho Hàng Trăm Công Thức Món Ăn Thực Chiến Để Mở Quán Kinh Doanh
+      </h1>
+      <p class="text-stone-200 text-sm sm:text-base leading-relaxed max-w-2xl mb-6">
+        Chuyên cung cấp bộ công thức món ăn vặt, đồ uống, hải sản và xốt chấm chuẩn định lượng kinh doanh dành cho người mở quán, xe đẩy và bán online tại nhà. Mỗi công thức là <strong>1 file PDF độc lập, chi tiết từng gram</strong> — ai cũng có thể làm chuẩn vị ngay từ mẻ đầu tiên.
+      </p>
+
+      <!-- Chính sách giá nổi bật -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-6">
+        <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl p-3 flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-orange-500/30 flex items-center justify-center shrink-0">
+            <i data-lucide="tag" class="w-4 h-4 text-orange-200"></i>
+          </div>
+          <div class="text-xs">
+            <div class="font-bold text-white">Mua lẻ 49.000đ/món</div>
+            <div class="text-stone-300">Giá gốc 100.000đ</div>
+          </div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl p-3 flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-emerald-500/30 flex items-center justify-center shrink-0">
+            <i data-lucide="trending-down" class="w-4 h-4 text-emerald-200"></i>
+          </div>
+          <div class="text-xs">
+            <div class="font-bold text-white">Từ món thứ 4: 35.000đ</div>
+            <div class="text-stone-300">Cộng dồn mọi nhóm món</div>
+          </div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl p-3 flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-amber-500/30 flex items-center justify-center shrink-0">
+            <i data-lucide="layers" class="w-4 h-4 text-amber-200"></i>
+          </div>
+          <div class="text-xs">
+            <div class="font-bold text-white">Nguyên nhóm giảm 30%</div>
+            <div class="text-stone-300">Tự động mở khóa 24/7</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thanh tìm kiếm nhanh -->
+      <div class="relative max-w-xl">
+        <i data-lucide="search" class="w-5 h-5 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+        <input
+          id="searchInput"
+          type="text"
+          oninput="renderCatalog()"
+          placeholder="Tìm nhanh món ăn (vd: Chân gà, Sốt Thái, Trà mãng cầu...)"
+          class="w-full pl-11 pr-4 py-3 rounded-xl bg-white text-stone-900 placeholder-stone-400 text-sm font-medium shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- DANH SÁCH 14 NHÓM CÔNG THỨC -->
+  <main class="max-w-4xl mx-auto px-4 py-7">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-lg sm:text-xl font-extrabold text-stone-900">Danh sách 14 Nhóm Công Thức</h2>
+        <p class="text-xs sm:text-sm text-stone-500">Bấm vào từng nhóm để xem danh sách món • Bấm vào món để xem mô tả & giá</p>
+      </div>
+    </div>
+
+    <div id="catalogContainer" class="space-y-3.5">
+      <!-- Render động bằng JS -->
+    </div>
+  </main>
+
+  <!-- NÚT HỖ TRỢ ZALO NỔI -->
+  <a
+    id="zaloBtn"
+    href="https://zalo.me/0905508121"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="fixed right-4 bottom-24 z-40 flex items-center gap-2 pl-3 pr-4 py-2.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/30 transition transform hover:scale-105"
+    title="Hỗ trợ qua Zalo"
+  >
+    <span class="w-7 h-7 rounded-full bg-white text-blue-600 font-extrabold text-xs flex items-center justify-center">Zalo</span>
+    <span class="text-xs font-bold">Hỗ trợ</span>
+  </a>
+
+  <!-- THANH THANH TOÁN CỐ ĐỊNH DƯỚI CÙNG -->
+  <div id="stickyCartBar" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-stone-200 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <span id="cartSummaryText" class="text-xs font-semibold text-stone-600">0 món đã chọn</span>
+          <span id="cartSavingsBadge" class="hidden px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[11px] font-bold">Tiết kiệm 0đ</span>
+        </div>
+        <div id="cartTotalPrice" class="text-lg sm:text-xl font-extrabold text-orange-600">0đ</div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="clearCart()" class="p-2.5 rounded-xl border border-stone-200 text-stone-500 hover:bg-stone-100" title="Xóa giỏ hàng">
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+        <button onclick="openCheckoutModal()" class="px-5 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold text-sm shadow-md flex items-center gap-2 transition">
+          <span>Thanh toán</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL THANH TOÁN -->
+  <div id="checkoutModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl max-h-[92vh] overflow-y-auto shadow-2xl">
+      <div class="sticky top-0 bg-white border-b border-stone-200 px-5 py-4 flex items-center justify-between">
+        <h3 class="font-extrabold text-base text-stone-900">Thanh toán & Nhận công thức tự động</h3>
+        <button onclick="closeCheckoutModal()" class="p-1.5 rounded-lg hover:bg-stone-100 text-stone-500">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div id="checkoutStep1" class="p-5 space-y-4">
+        <div class="bg-stone-50 rounded-xl p-3.5 border border-stone-200">
+          <div class="text-xs font-bold text-stone-500 uppercase mb-2">Đơn hàng của bạn</div>
+          <div id="checkoutItemsList" class="space-y-1.5 text-sm max-h-40 overflow-y-auto"></div>
+          <div class="border-t border-stone-200 mt-3 pt-2.5 flex justify-between items-center">
+            <span class="font-bold text-stone-700">Tổng thanh toán:</span>
+            <span id="checkoutTotalAmount" class="text-lg font-extrabold text-orange-600">0đ</span>
+          </div>
+        </div>
+
+        <!-- Đăng nhập Google hoặc nhập thông tin -->
+        <div id="googleLoginBox" class="bg-blue-50 border border-blue-200 rounded-xl p-3.5">
+          <p class="text-xs text-blue-800 mb-2.5 font-medium">
+            Đăng nhập bằng Google để lưu vĩnh viễn công thức vào mục <strong>Tài sản</strong> của bạn (đổi điện thoại vẫn tải lại được).
+          </p>
+          <button onclick="signInWithGoogle()" class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-stone-50 border border-stone-300 text-stone-800 font-bold text-sm flex items-center justify-center gap-2 shadow-xs">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-4 h-4" alt="Google" />
+            <span>Tiếp tục bằng Google</span>
+          </button>
+        </div>
+
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">Email nhận link công thức *</label>
+            <input id="customerEmail" type="email" placeholder="nhapemail@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">Số điện thoại (Zalo) *</label>
+            <input id="customerPhone" type="tel" placeholder="09xx xxx xxx" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" />
+          </div>
+        </div>
+
+        <button onclick="createOrderAndShowQR()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold text-sm shadow-md">
+          Tạo mã VietQR thanh toán ngay
+        </button>
+      </div>
+
+      <!-- BƯỚC 2: HIỂN THỊ MÃ VIETQR -->
+      <div id="checkoutStep2" class="hidden p-5 space-y-4 text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Đang chờ chuyển khoản (Tự động duyệt sau 2 giây)
+        </div>
+
+        <div class="bg-white p-3 rounded-2xl border-2 border-orange-200 inline-block shadow-sm">
+          <img id="vietqrImage" src="" alt="Mã VietQR" class="w-60 h-60 object-contain mx-auto" />
+        </div>
+
+        <div class="bg-stone-50 rounded-xl p-3.5 border border-stone-200 text-left text-xs space-y-2">
+          <div class="flex justify-between">
+            <span class="text-stone-500">Ngân hàng:</span>
+            <span class="font-bold text-stone-900">VietinBank</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-stone-500">Số tài khoản:</span>
+            <div class="flex items-center gap-1.5">
+              <span class="font-bold text-stone-900" id="qrAccNo">102001303309</span>
+              <button onclick="copyText('102001303309')" class="text-orange-600 font-bold underline">Copy</button>
+            </div>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-stone-500">Chủ tài khoản:</span>
+            <span class="font-bold text-stone-900">LE NGOC LAM</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-stone-500">Số tiền:</span>
+            <span id="qrAmountText" class="font-extrabold text-orange-600 text-sm">0đ</span>
+          </div>
+          <div class="flex justify-between items-center pt-1.5 border-t border-stone-200">
+            <span class="text-stone-500">Nội dung CK:</span>
+            <div class="flex items-center gap-1.5">
+              <span id="qrContentText" class="font-extrabold text-red-600 bg-red-50 px-2 py-0.5 rounded">SEVQR TVCT0000</span>
+              <button onclick="copyText(document.getElementById('qrContentText').innerText)" class="text-orange-600 font-bold underline">Copy</button>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-[11px] text-stone-500">
+          Lưu ý: Giữ nguyên nội dung chuyển khoản có chữ <strong>SEVQR</strong> để hệ thống tự động mở khóa công thức trong mục <strong>Tài sản</strong>.
+        </p>
+
+        <div class="flex gap-2">
+          <button onclick="backToStep1()" class="flex-1 py-2.5 rounded-xl border border-stone-300 text-stone-700 font-bold text-xs">Quay lại</button>
+          <a href="https://zalo.me/0905508121" target="_blank" class="flex-1 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs flex items-center justify-center gap-1">
+            Cần hỗ trợ Zalo
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL TÀI SẢN -->
+  <div id="assetsModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl max-h-[88vh] overflow-y-auto shadow-2xl">
+      <div class="sticky top-0 bg-white border-b border-stone-200 px-5 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i data-lucide="folder-heart" class="w-5 h-5 text-amber-600"></i>
+          <h3 class="font-extrabold text-base text-stone-900">Tài sản công thức của bạn</h3>
+        </div>
+        <button onclick="closeAssetsModal()" class="p-1.5 rounded-lg hover:bg-stone-100 text-stone-500">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="assetsContent" class="p-5">
+        <!-- Render động -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CFG = window.TVCT_CONFIG;
+    const CATALOG = window.TVCT_CATALOG;
+
+    // Khởi tạo Supabase nếu đã điền key
+    let supabaseClient = null;
+    if (CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY) {
+      supabaseClient = window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
+    }
+
+    // Trạng thái ứng dụng
+    let currentUser = null;
+    let expandedGroups = new Set();
+    let expandedItems = new Set();
+    let cartGroups = new Set(); // Set of group IDs
+    let cartItems = new Set();  // Set of item IDs
+    let ownedAssets = [];
+    let pollInterval = null;
+
+    const formatVND = (n) => Number(n || 0).toLocaleString('vi-VN') + 'đ';
+
+    // Tính giá chuẩn Phương án 1 (Cách A)
+    function calculateCart() {
+      let total = 0;
+      let originalTotal = 0;
+      let groupList = [];
+      let itemList = [];
+
+      // 1. Tính tiền các nhóm đã chọn
+      cartGroups.forEach(gid => {
+        const g = CATALOG.find(x => x.id === gid);
+        if (g) {
+          total += g.groupPrice;
+          originalTotal += g.itemCount * 100000;
+          groupList.push(g);
+        }
+      });
+
+      // 2. Tính tiền các món lẻ (loại bỏ món đã nằm trong nhóm đã chọn)
+      cartItems.forEach(iid => {
+        const parentGroup = CATALOG.find(g => g.items.some(i => i.id === iid));
+        if (parentGroup && !cartGroups.has(parentGroup.id)) {
+          const item = parentGroup.items.find(i => i.id === iid);
+          if (item) itemList.push(item);
+        }
+      });
+
+      // Áp dụng Cách A: 3 món đầu 49k, từ món thứ 4 còn 35k
+      itemList.forEach((item, idx) => {
+        total += (idx < 3) ? 49000 : 35000;
+        originalTotal += 100000;
+      });
+
+      const savings = Math.max(0, originalTotal - total);
+      return { total, originalTotal, savings, groupList, itemList };
+    }
+
+    function toggleGroupExpand(gid) {
+      if (expandedGroups.has(gid)) expandedGroups.delete(gid);
+      else expandedGroups.add(gid);
+      renderCatalog();
+    }
+
+    function toggleItemExpand(iid) {
+      if (expandedItems.has(iid)) expandedItems.delete(iid);
+      else expandedItems.add(iid);
+      renderCatalog();
+    }
+
+    function toggleCartGroup(gid, event) {
+      if (event) event.stopPropagation();
+      if (cartGroups.has(gid)) {
+        cartGroups.delete(gid);
+      } else {
+        cartGroups.add(gid);
+        // Bỏ chọn các món lẻ thuộc nhóm này để không bị tính trùng
+        const g = CATALOG.find(x => x.id === gid);
+        if (g) g.items.forEach(i => cartItems.delete(i.id));
+      }
+      renderCatalog();
+      updateStickyCart();
+    }
+
+    function toggleCartItem(iid, gid, event) {
+      if (event) event.stopPropagation();
+      if (cartGroups.has(gid)) return; // Đã mua nguyên nhóm
+      if (cartItems.has(iid)) cartItems.delete(iid);
+      else cartItems.add(iid);
+      renderCatalog();
+      updateStickyCart();
+    }
+
+    function clearCart() {
+      cartGroups.clear();
+      cartItems.clear();
+      renderCatalog();
+      updateStickyCart();
+    }
+
+    function updateStickyCart() {
+      const { total, savings, groupList, itemList } = calculateCart();
+      const bar = document.getElementById('stickyCartBar');
+      if (groupList.length === 0 && itemList.length === 0) {
+        bar.classList.add('hidden');
+        return;
+      }
+      bar.classList.remove('hidden');
+
+      let parts = [];
+      if (groupList.length > 0) parts.push(`${groupList.length} nhóm`);
+      if (itemList.length > 0) parts.push(`${itemList.length} món lẻ`);
+      document.getElementById('cartSummaryText').innerText = parts.join(' + ') + ' đã chọn';
+      document.getElementById('cartTotalPrice').innerText = formatVND(total);
+
+      const badge = document.getElementById('cartSavingsBadge');
+      if (savings > 0) {
+        badge.innerText = `Tiết kiệm ${formatVND(savings)}`;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function renderCatalog() {
+      const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+      const container = document.getElementById('catalogContainer');
+      let html = '';
+
+      CATALOG.forEach(g => {
+        const filteredItems = q
+          ? g.items.filter(i => i.name.toLowerCase().includes(q) || g.name.toLowerCase().includes(q))
+          : g.items;
+
+        if (q && filteredItems.length === 0) return;
+
+        const isGroupOpen = expandedGroups.has(g.id) || Boolean(q);
+        const isGroupSelected = cartGroups.has(g.id);
+
+        html += `
+          <div class="bg-white rounded-2xl border ${isGroupSelected ? 'border-orange-500 ring-1 ring-orange-400' : 'border-stone-200'} shadow-xs overflow-hidden transition">
+            <!-- HEADER NHÓM -->
+            <div onclick="toggleGroupExpand(${g.id})" class="p-3.5 sm:p-4 flex items-center gap-3.5 cursor-pointer hover:bg-stone-50 transition">
+              <img src="${g.image}" alt="${g.shortName}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover shrink-0 bg-stone-100" loading="lazy" />
+              <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-1.5 mb-1">
+                  <span class="px-2 py-0.5 rounded-md bg-red-50 text-red-600 text-[10px] sm:text-[11px] font-bold border border-red-100">
+                    Mua nguyên nhóm giảm 30%
+                  </span>
+                  <span class="text-[11px] font-semibold text-stone-500">${g.itemCount} công thức</span>
+                </div>
+                <h3 class="font-extrabold text-sm sm:text-base text-stone-900 leading-snug">${g.name}</h3>
+                <div class="flex items-center gap-2 mt-1.5">
+                  <span class="text-xs text-stone-400 line-through">${formatVND(g.totalRetailPrice)}</span>
+                  <span class="text-sm sm:text-base font-extrabold text-orange-600">${formatVND(g.groupPrice)}</span>
+                </div>
+              </div>
+              <div class="flex flex-col items-end gap-2 shrink-0">
+                <button
+                  onclick="toggleCartGroup(${g.id}, event)"
+                  class="px-3 py-1.5 rounded-xl text-xs font-bold transition ${isGroupSelected ? 'bg-emerald-600 text-white' : 'bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200'}"
+                >
+                  ${isGroupSelected ? '✓ Đã chọn nhóm' : 'Mua nguyên nhóm'}
+                </button>
+                <div class="text-stone-400 flex items-center gap-1 text-[11px] font-medium">
+                  <span>${isGroupOpen ? 'Thu gọn' : 'Xem món'}</span>
+                  <i data-lucide="${isGroupOpen ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- DANH SÁCH MÓN TRONG NHÓM -->
+            ${isGroupOpen ? `
+              <div class="border-t border-stone-100 divide-y divide-stone-100 bg-stone-50/50">
+                ${filteredItems.map(item => {
+                  const isItemOpen = expandedItems.has(item.id);
+                  const isItemSelected = cartItems.has(item.id) || isGroupSelected;
+                  return `
+                    <div class="transition">
+                      <div onclick="toggleItemExpand(${item.id})" class="px-4 py-3 flex items-center justify-between gap-3 cursor-pointer hover:bg-white">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                          <span class="w-6 h-6 rounded-full bg-orange-100 text-orange-700 text-xs font-bold flex items-center justify-center shrink-0">${item.id}</span>
+                          <span class="font-semibold text-sm text-stone-800 truncate">${item.name}</span>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                          <span class="text-xs font-bold text-orange-600">49k</span>
+                          <i data-lucide="${isItemOpen ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4 text-stone-400"></i>
+                        </div>
+                      </div>
+
+                      ${isItemOpen ? `
+                        <div class="px-4 pb-4 pt-1 bg-white border-t border-stone-100">
+                          <p class="text-xs sm:text-sm text-stone-600 leading-relaxed mb-3">${item.desc}</p>
+                          <div class="flex flex-wrap items-center justify-between gap-3 bg-orange-50/70 border border-orange-100 rounded-xl p-3">
+                            <div>
+                              <div class="flex items-center gap-2">
+                                <span class="text-xs text-stone-400 line-through">${formatVND(item.originalPrice)}</span>
+                                <span class="text-base font-extrabold text-orange-600">${formatVND(item.price)}</span>
+                                <span class="text-[11px] font-semibold text-stone-500">/ bản PDF độc lập</span>
+                              </div>
+                              <div class="text-xs font-bold text-emerald-700 mt-1 flex items-center gap-1">
+                                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                                Mua từ món thứ 4 trở đi chỉ còn 35.000đ/món
+                              </div>
+                            </div>
+                            <button
+                              onclick="toggleCartItem(${item.id}, ${g.id}, event)"
+                              ${isGroupSelected ? 'disabled' : ''}
+                              class="px-4 py-2 rounded-xl text-xs font-bold transition ${
+                                isGroupSelected
+                                  ? 'bg-emerald-100 text-emerald-700 cursor-default'
+                                  : isItemSelected
+                                    ? 'bg-emerald-600 text-white'
+                                    : 'bg-stone-900 hover:bg-stone-800 text-white'
+                              }"
+                            >
+                              ${isGroupSelected ? 'Đã gồm trong nhóm' : isItemSelected ? '✓ Đã chọn mua' : '+ Chọn mua'}
+                            </button>
+                          </div>
+                        </div>
+                      ` : ''}
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      });
+
+      if (!html) {
+        html = `<div class="text-center py-12 text-stone-500 text-sm">Không tìm thấy món nào khớp với từ khóa "${q}".</div>`;
+      }
+      container.innerHTML = html;
+      lucide.createIcons();
+    }
+
+    // AUTH & ASSETS
+    async function initAuth() {
+      if (!supabaseClient) return;
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session && session.user) {
+        setLoggedInUser(session.user);
+      }
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        if (session && session.user) setLoggedInUser(session.user);
+        else setLoggedOutUser();
+      });
+    }
+
+    function setLoggedInUser(user) {
+      currentUser = user;
+      document.getElementById('authBtnText').innerText = user.email.split('@')[0];
+      document.getElementById('customerEmail').value = user.email;
+      document.getElementById('googleLoginBox').classList.add('hidden');
+      loadUserAssets();
+    }
+
+    function setLoggedOutUser() {
+      currentUser = null;
+      document.getElementById('authBtnText').innerText = 'Đăng nhập';
+      document.getElementById('googleLoginBox').classList.remove('hidden');
+      ownedAssets = [];
+      updateAssetBadge();
+    }
+
+    async function signInWithGoogle() {
+      if (!supabaseClient) {
+        alert('Hệ thống đang chờ Sếp dán mã Supabase vào file config.js để kích hoạt đăng nhập Google!');
+        return;
+      }
+      await supabaseClient.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin }
+      });
+    }
+
+    async function handleAuthClick() {
+      if (currentUser) {
+        if (confirm(`Bạn đang đăng nhập bằng ${currentUser.email}. Bạn có muốn đăng xuất không?`)) {
+          await supabaseClient.auth.signOut();
+        }
+      } else {
+        signInWithGoogle();
+      }
+    }
+
+    async function loadUserAssets() {
+      if (!supabaseClient || !currentUser) return;
+      const { data } = await supabaseClient
+        .from('user_assets')
+        .select('*')
+        .eq('user_email', currentUser.email)
+        .order('created_at', { ascending: false });
+      ownedAssets = data || [];
+      updateAssetBadge();
+    }
+
+    function updateAssetBadge() {
+      const badge = document.getElementById('assetCountBadge');
+      if (ownedAssets.length > 0) {
+        badge.innerText = ownedAssets.length;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function openAssetsModal() {
+      const modal = document.getElementById('assetsModal');
+      const content = document.getElementById('assetsContent');
+      modal.classList.remove('hidden');
+
+      if (!currentUser) {
+        content.innerHTML = `
+          <div class="text-center py-6 space-y-3">
+            <p class="text-sm text-stone-600">Vui lòng đăng nhập bằng Google để xem toàn bộ công thức bạn đã mua.</p>
+            <button onclick="signInWithGoogle()" class="px-5 py-2.5 rounded-xl bg-stone-900 text-white font-bold text-sm">Đăng nhập Google</button>
+          </div>
+        `;
+        return;
+      }
+
+      if (ownedAssets.length === 0) {
+        content.innerHTML = `
+          <div class="text-center py-8 text-stone-500 text-sm">
+            Tài khoản <strong>${currentUser.email}</strong> chưa có công thức nào. Hãy chọn món và thanh toán để mở khóa tự động nhé!
+          </div>
+        `;
+        return;
+      }
+
+      content.innerHTML = `
+        <div class="space-y-2.5">
+          ${ownedAssets.map(a => `
+            <div class="p-3 rounded-xl border border-stone-200 flex items-center justify-between gap-3 bg-stone-50">
+              <div class="min-w-0">
+                <div class="text-[11px] font-bold text-amber-700 uppercase">${a.asset_type === 'group' ? 'Trọn nhóm' : 'Công thức lẻ'}</div>
+                <div class="font-bold text-sm text-stone-900 truncate">${a.asset_name}</div>
+              </div>
+              <a href="${a.drive_url}" target="_blank" class="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shrink-0">
+                Mở PDF
+              </a>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function closeAssetsModal() {
+      document.getElementById('assetsModal').classList.add('hidden');
+    }
+
+    // CHECKOUT & VIETQR
+    function openCheckoutModal() {
+      const { total, groupList, itemList } = calculateCart();
+      const listEl = document.getElementById('checkoutItemsList');
+      let html = '';
+      groupList.forEach(g => {
+        html += `<div class="flex justify-between"><span>[Nhóm] ${g.shortName}</span><span class="font-bold">${formatVND(g.groupPrice)}</span></div>`;
+      });
+      itemList.forEach((item, idx) => {
+        const p = idx < 3 ? 49000 : 35000;
+        html += `<div class="flex justify-between"><span>${item.id}. ${item.name}</span><span class="font-bold">${formatVND(p)}</span></div>`;
+      });
+      listEl.innerHTML = html;
+      document.getElementById('checkoutTotalAmount').innerText = formatVND(total);
+      document.getElementById('checkoutStep1').classList.remove('hidden');
+      document.getElementById('checkoutStep2').classList.add('hidden');
+      document.getElementById('checkoutModal').classList.remove('hidden');
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById('checkoutModal').classList.add('hidden');
+      if (pollInterval) clearInterval(pollInterval);
+    }
+
+    function backToStep1() {
+      if (pollInterval) clearInterval(pollInterval);
+      document.getElementById('checkoutStep2').classList.add('hidden');
+      document.getElementById('checkoutStep1').classList.remove('hidden');
+    }
+
+    async function createOrderAndShowQR() {
+      const email = document.getElementById('customerEmail').value.trim();
+      const phone = document.getElementById('customerPhone').value.trim();
+      if (!email || !email.includes('@')) {
+        alert('Vui lòng nhập đúng địa chỉ Email để nhận công thức!');
+        return;
+      }
+      if (!phone || phone.length < 9) {
+        alert('Vui lòng nhập Số điện thoại (Zalo) để được hỗ trợ khi cần!');
+        return;
+      }
+
+      const { total, groupList, itemList } = calculateCart();
+      const orderCode = 'TVCT' + Math.floor(100000 + Math.random() * 900000);
+      const transferContent = `SEVQR ${orderCode}`;
+
+      // Lưu đơn hàng vào Supabase nếu đã kết nối
+      if (supabaseClient) {
+        const itemsPayload = [
+          ...groupList.map(g => ({ type: 'group', id: g.id, name: g.name, url: g.folderUrl })),
+          ...itemList.map(i => ({ type: 'item', id: i.id, name: i.name, url: i.url }))
+        ];
+        await supabaseClient.from('orders').insert([{
+          order_code: orderCode,
+          user_id: currentUser ? currentUser.id : null,
+          user_email: email,
+          user_phone: phone,
+          items: itemsPayload,
+          total_amount: total,
+          status: 'pending'
+        }]);
+
+        // Tự động kiểm tra trạng thái thanh toán mỗi 3 giây
+        pollInterval = setInterval(async () => {
+          const { data } = await supabaseClient
+            .from('orders')
+            .select('status')
+            .eq('order_code', orderCode)
+            .single();
+          if (data && data.status === 'paid') {
+            clearInterval(pollInterval);
+            await loadUserAssets();
+            clearCart();
+            closeCheckoutModal();
+            alert('Thanh toán thành công! Toàn bộ công thức đã được mở khóa trong mục Tài sản.');
+            openAssetsModal();
+          }
+        }, 3000);
+      }
+
+      // Tạo link ảnh VietQR chuẩn VietinBank + SEVQR
+      const qrUrl = `https://img.vietqr.io/image/${CFG.BANK_ID}-${CFG.ACCOUNT_NO}-compact2.png?amount=${total}&addInfo=${encodeURIComponent(transferContent)}&accountName=${encodeURIComponent(CFG.ACCOUNT_NAME)}`;
+      document.getElementById('vietqrImage').src = qrUrl;
+      document.getElementById('qrAmountText').innerText = formatVND(total);
+      document.getElementById('qrContentText').innerText = transferContent;
+
+      document.getElementById('checkoutStep1').classList.add('hidden');
+      document.getElementById('checkoutStep2').classList.remove('hidden');
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text);
+      alert('Đã sao chép: ' + text);
+    }
+
+    // Khởi chạy
+    renderCatalog();
+    initAuth();
+  </script>
+</body>
+</html>
